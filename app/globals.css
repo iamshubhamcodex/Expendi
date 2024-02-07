@@ -10,12 +10,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 225, 227, 230;
+    --background-end-rgb: 225, 227, 230;
   }
 }
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -30,4 +34,35 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.expendiList * {
+  transition: all 0.25s linear;
+}
+.expendiList {
+  scrollbar-gutter: stable;
+}
+.expendiList::-webkit-scrollbar {
+  width: 5px;
+}
+.expendiList::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.expendiList::-webkit-scrollbar-thumb {
+  background-color: #bebebe;
+  border-radius: 30px;
+}
+.listCard {
+  position: relative;
+}
+.reason {
+  opacity: 0;
+  margin-top: -7px;
+  height: 0px !important;
+  overflow: hidden;
+}
+.listCard:hover .reason {
+  margin-top: 10px;
+  opacity: 1;
+  height: 100% !important;
 }
