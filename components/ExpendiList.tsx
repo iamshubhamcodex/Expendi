@@ -5,7 +5,7 @@ import { Empty, Flex, Skeleton, Space } from "antd";
 import { getUniqId } from "@/utils/utility";
 
 type ExpendiListSearchType = {
-  search: boolean;
+  search?: boolean;
 };
 // type ExpendiList = ExpendiListSearchType | {};
 // const isExpendiListSearchType = (
@@ -22,7 +22,7 @@ const ExpendiList = ({ search }: ExpendiListSearchType) => {
   const { expendi, loading, searchExpendiList, deleteExpendi } =
     useExpendiContext();
   // const isSearchEnabled = isExpendiListSearchType(props);
-  const isSearchEnabled = search;
+  const isSearchEnabled = search ?? false;
   const itemsToRender = isSearchEnabled ? searchExpendiList : expendi;
 
   const handleDeleteExpendi = async (id: string) => {
