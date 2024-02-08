@@ -6,6 +6,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import isBetween from "dayjs/plugin/isBetween";
 import { ExpendiItem, useExpendiContext } from "@/context/ExpendiState";
 import useLocalStorage from "@/utils/hooks/useLocalStorage";
+import useAfterMount from "@/utils/hooks/useAfterMount";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isBetween);
@@ -15,44 +16,38 @@ const initialFormSearchValues = {
 };
 const dateFormat = "YYYY-MM-DD";
 
-const ExpendiSearchBar = ({
-  setSearchExpendi,
-}: {
-  setSearchExpendi: (expend?: ExpendiItem[]) => void;
-}) => {
-  const { expendi } = useExpendiContext();
+const ExpendiSearchBar = () => {
+  const { searchExpendi, loading, setSearchExpendiList } = useExpendiContext();
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
 
   const handleSearchSubmit = useCallback(
     (e: typeof initialFormSearchValues) => {
       const startDate = e.rangeDate[0];
       const endDate = e.rangeDate[1];
 
-      setLoading(true);
-      setSearchExpendi();
+      // setLoading(true);
 
-      setTimeout(() => {
-        setSearchExpendi(
-          expendi
-            ? expendi.filter((expend) => {
-                return (
-                  dayjs(expend.date).isSame(startDate, "date") ||
-                  dayjs(expend.date).isSame(endDate, "date") ||
-                  dayjs(expend.date).isBetween(startDate, endDate)
-                );
-              })
-            : []
-        );
-        setLoading(false);
-      }, 2000);
+      searchExpendi({
+        startDate: startDate.toString(),
+        endDate: endDate.toString(),
+      })
+        .then((expendi) => {
+          setSearchExpendiList(expendi);
+        })
+        .catch((err) => {
+          alert("Error");
+        })
+        .finally(() => {
+          // setLoading(false);
+        });
     },
-    [expendi, setSearchExpendi]
+    [setSearchExpendiList, searchExpendi]
   );
 
-  useEffect(() => {
+  useAfterMount(() => {
     handleSearchSubmit({ rangeDate: [dayjs(), dayjs()] });
-  }, [handleSearchSubmit]);
+  });
 
   return (
     <div className="bg-white py-2 px-5 rounded-xl mb-4 shadow-xl">
@@ -62,12 +57,6 @@ const ExpendiSearchBar = ({
         initialValues={initialFormSearchValues}
       >
         <Space>
-          {/* <Form.Item className="!mb-2" name={"startDate"} noStyle>
-            <DatePicker />
-          </Form.Item>
-          <Form.Item className="!mb-2" name={"endDate"} noStyle>
-            <DatePicker />
-          </Form.Item> */}
           <Form.Item name={"rangeDate"} noStyle>
             <DatePicker.RangePicker format={dateFormat} />
           </Form.Item>

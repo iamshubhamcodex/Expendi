@@ -3,6 +3,7 @@ import { SaveOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, Space } from "antd";
 import { ExpendiItem, useExpendiContext } from "@/context/ExpendiState";
 import dayjs from "dayjs";
+import axios from "axios";
 
 const initialFormDataValues = {
   amount: 0,
@@ -11,19 +12,11 @@ const initialFormDataValues = {
   payee: "",
 };
 const ExpendiForm = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm<ExpendiItem>();
-  const { saveExpendi } = useExpendiContext();
+  const { saveExpendi, loading } = useExpendiContext();
 
-  const saveData = (e: any) => {
-    setLoading(true);
-
-    
-    setTimeout(() => {
-      saveExpendi(form.getFieldsValue());
-      setLoading(false);
-      emptyFormData()
-    }, 2000);
+  const saveData = async () => {
+    saveExpendi(form.getFieldsValue(), emptyFormData);
   };
   const emptyFormData = (): void => {
     form.resetFields();

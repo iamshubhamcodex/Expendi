@@ -55,14 +55,20 @@ body {
 .listCard {
   position: relative;
 }
-.reason {
+.detail {
   opacity: 0;
-  margin-top: -7px;
+  margin-top: 0px;
   height: 0px !important;
   overflow: hidden;
 }
-.listCard:hover .reason {
+.listCard:hover .detail {
   margin-top: 10px;
   opacity: 1;
   height: 100% !important;
 }
+/* .deleteIcon {
+  opacity: ;
+}
+.listCard:hover .deleteIcon{
+  right: -30px;
+} */

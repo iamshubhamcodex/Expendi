@@ -4,12 +4,10 @@ import ExpendiList from "./ExpendiList";
 import { ExpendiItem } from "@/context/ExpendiState";
 
 const ExpendiSearchList = () => {
-  const [searchExpendi, setSearchExpendi] = useState<ExpendiItem[]>();
-  
   return (
     <div>
-      <ExpendiSearchBar setSearchExpendi={setSearchExpendi} />
-      <ExpendiList search searchExpendi={searchExpendi}/>
+      <ExpendiSearchBar />
+      <ExpendiList search />
     </div>
   );
 };

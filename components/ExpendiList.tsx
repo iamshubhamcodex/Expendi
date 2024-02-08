@@ -6,23 +6,31 @@ import { getUniqId } from "@/utils/utility";
 
 type ExpendiListSearchType = {
   search: boolean;
-  searchExpendi: ExpendiItem[] | undefined;
 };
-type ExpendiList = ExpendiListSearchType | {};
-const isExpendiListSearchType = (
-  props: ExpendiList
-): props is ExpendiListSearchType => {
-  return (props as ExpendiListSearchType).search !== undefined;
-};
+// type ExpendiList = ExpendiListSearchType | {};
+// const isExpendiListSearchType = (
+//   props: ExpendiList
+// ): props is ExpendiListSearchType => {
+//   return (props as ExpendiListSearchType).search !== undefined;
+// };
+// const getSetSearchExpendi = (
+//   props: ExpendiList
+// ) => {
+//   return (props as ExpendiListSearchType).setSearchExpendi;
+// };
+const ExpendiList = ({ search }: ExpendiListSearchType) => {
+  const { expendi, loading, searchExpendiList, deleteExpendi } =
+    useExpendiContext();
+  // const isSearchEnabled = isExpendiListSearchType(props);
+  const isSearchEnabled = search;
+  const itemsToRender = isSearchEnabled ? searchExpendiList : expendi;
 
-const ExpendiList = (props: ExpendiList) => {
-  const { expendi } = useExpendiContext();
-  const isSearchEnabled = isExpendiListSearchType(props);
-  const itemsToRender = isSearchEnabled ? props.searchExpendi : expendi
-
+  const handleDeleteExpendi = async (id: string) => {
+    await deleteExpendi(id, search ? "search" : "home");
+  };
   return (
     <div className="h-[70vh] overflow-auto pr-2 expendiList">
-      {!itemsToRender && (
+      {loading && (
         <>
           <div className="bg-white py-3 px-4 rounded-lg mb-3">
             <Flex justify="space-between" align="center">
@@ -44,7 +52,7 @@ const ExpendiList = (props: ExpendiList) => {
           </div>
         </>
       )}
-      {itemsToRender && itemsToRender.length === 0 && (
+      {!loading && itemsToRender && itemsToRender.length === 0 && (
         <div className="bg-white rounded-lg py-4 px-2">
           <Empty />
         </div>
@@ -53,7 +61,12 @@ const ExpendiList = (props: ExpendiList) => {
         itemsToRender.length > 0 &&
         itemsToRender.map((expend, i) => {
           return (
-            <ExpendiListCard key={expend._id ?? getUniqId()} expendi={expend} />
+            <ExpendiListCard
+              key={expend._id ?? getUniqId()}
+              expendi={expend}
+              search={isSearchEnabled}
+              handleDeleteExpendi={handleDeleteExpendi}
+            />
           );
         })}
     </div>
