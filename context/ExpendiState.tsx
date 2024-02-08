@@ -36,11 +36,14 @@ export const ExpendiState = ({ children }: PropsWithChildren) => {
   const [expendi, setExpendi] = useState<ExpendiItem[]>([]);
   const [searchExpendiList, setSearchExpendiList] = useState<ExpendiItem[]>([]);
 
+
+  const host = "https://expendi.onrender.com"
+
   const saveExpendi = (body: ExpendiItem, success?: () => void): void => {
     setLoading(true);
 
     axios
-      .post("/api/expendi", {
+      .post(host + "/api/expendi", {
         ...body,
       })
       .then(({ data, status }) => {
@@ -86,7 +89,7 @@ export const ExpendiState = ({ children }: PropsWithChildren) => {
   ): Promise<ExpendiItem[]> => {
     setLoading(true);
     let { data, status } = await axios.get<{ expendis: ExpendiItem[] }>(
-      "/api/expendi" + (body ? encodeParametersToURL(body) : "")
+      host + "/api/expendi" + (body ? encodeParametersToURL(body) : "")
     );
 
     setLoading(false);
@@ -111,7 +114,7 @@ export const ExpendiState = ({ children }: PropsWithChildren) => {
     id: string,
     where: "home" | "search"
   ): Promise<void | ExpendiItem[]> => {
-    fetch("http://localhost:3000/api/expendi", {
+    fetch(host + "/api/expendi", {
       method: "DELETE",
       headers: {
         Accept: "application/json",
